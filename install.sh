@@ -10,6 +10,8 @@ fi
 # this will be eval'd in the functions below because arrays can't be exported
 export MAIN_PLATFORMS='declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80" [leonardo]="arduino:avr:leonardo" [m4]="adafruit:samd:adafruit_metro_m4" )'
 
+export AVR_PLATFORMS='declare -A avr_platforms=( [uno]="arduino:avr:uno" [mega]="arduino:avr:mega" [leonardo]="arduino:avr:leonardo" )'
+
 # associative array for other platforms that can be called explicitly in .travis.yml configs
 # this will be eval'd in the functions below because arrays can't be exported
 export AUX_PLATFORMS='declare -A aux_platforms=( [trinket]="adafruit:avr:trinket5" [gemma]="arduino:avr:gemma" )'
@@ -312,6 +314,54 @@ function build_main_platforms()
     # is this the last platform in the loop
     local last_platform=0
     if [ "$last" == "${main_platforms[$p_key]}" ]; then
+      last_platform=1
+    fi
+
+    # build all examples for this platform
+    build_platform $p_key
+
+    # check if build failed
+    if [ $? -ne 0 ]; then
+      platforms_json="${platforms_json}$(json_platform $p_key 0 "$PLATFORM_JSON" $last_platform)"
+      exit_code=1
+    else
+      platforms_json="${platforms_json}$(json_platform $p_key 1 "$PLATFORM_JSON" $last_platform)"
+    fi
+
+  done
+
+  # exit code is opposite of json build status
+  if [ $exit_code -eq 0 ]; then
+    json_main_platforms 1 "$platforms_json"
+  else
+    json_main_platforms 0 "$platforms_json"
+  fi
+
+  return $exit_code
+
+}
+
+function build_avr_platforms()
+{
+
+  # arrays can't be exported, so we have to eval
+  eval $AVR_PLATFORMS
+
+  # track the build status all platforms
+  local exit_code=0
+
+  # var to hold platforms
+  local platforms_json=""
+
+  # get the last element in the array
+  local last="${avr_platforms[@]:(-1)}"
+
+  # loop through platforms in main platforms assoc array
+  for p_key in "${!avr_platforms[@]}"; do
+
+    # is this the last platform in the loop
+    local last_platform=0
+    if [ "$last" == "${avr_platforms[$p_key]}" ]; then
       last_platform=1
     fi
 
