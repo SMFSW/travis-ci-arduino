@@ -20,6 +20,16 @@ source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/
 ```
 language: c
 sudo: false
+cache:
+  directories:
+    - ~/arduino_ide
+    - ~/.arduino15/packages/
+git:
+  depth: false
+  quiet: true
+env:
+  global:
+     - ARDUINO_IDE_VERSION="1.8.7"
 before_install:
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 install:
@@ -31,6 +41,10 @@ notifications:
     on_success: change
     on_failure: change
 ```
+
+**Choosing Arduino IDE version**
+
+You could use any version of IDE by setting `ARDUINO_IDE_VERSION` variable but we recommend keeping this variable unused because script gets updated and you then will not have to modify `.travis.yml` manually.
 
 ## Automated Example Verification Bash Functions
 
