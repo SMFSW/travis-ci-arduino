@@ -41,9 +41,9 @@ set -e
 cd $TRAVIS_BUILD_DIR
 
 # Getting latest doxygen binaries from doxygen website
-wget -q http://doxygen.nl/files/doxygen-1.8.13.linux.bin.tar.gz
-tar -xf doxygen-1.8.13.linux.bin.tar.gz
-mv doxygen-1.8.13/bin/doxygen .
+wget -q http://doxygen.nl/files/doxygen-1.8.14.linux.bin.tar.gz
+tar -xf doxygen-1.8.14.linux.bin.tar.gz
+mv doxygen-1.8.14/bin/doxygen .
 chmod +x doxygen
 
 # Create a clean working directory for this script.
