@@ -36,7 +36,7 @@ __AUTHOR__="Jeroen de Bruijn, modified by ladyada"
 ##### Setup this script and get the current gh-pages branch.               #####
 echo 'Setting up the script...'
 # Exit with nonzero exit code if anything fails
-set -e
+# set -e
 
 cd $TRAVIS_BUILD_DIR
 
