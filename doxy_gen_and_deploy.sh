@@ -105,10 +105,11 @@ sed -i "s;^HTML_OUTPUT .*;HTML_OUTPUT = code_docs/${TRAVIS_REPO_NAME}/html;"  ${
 cd $TRAVIS_BUILD_DIR
 
 # Print out doxygen warnings in red
+# Filtering unsupported tag lines from output if Doxyfile is too recent
 ${TRAVIS_BUILD_DIR}/doxygen $DOXYFILE 2>&1 | grep -v "^warning: ignoring unsupported tag" | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
 
 # if any warnings, bail!
-# if [ -s foo.txt ]; then exit 1 ; fi
+if [ -s foo.txt ]; then exit 1 ; fi
 
 rm foo.txt
 
