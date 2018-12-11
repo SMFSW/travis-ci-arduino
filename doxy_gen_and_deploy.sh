@@ -46,6 +46,8 @@ tar -xf doxygen-1.8.14.linux.bin.tar.gz
 mv doxygen-1.8.14/bin/doxygen .
 chmod +x doxygen
 
+read -r -p "Wait 10 seconds or press any key to continue immediately" -t 10 -n 1 -s
+
 # Create a clean working directory for this script.
 mkdir code_docs
 cd code_docs
@@ -83,6 +85,8 @@ fi
 # to NO, which it is by default. So creating the file just in case.
 echo "" > .nojekyll
 
+read -r -p "Wait 10 seconds or press any key to continue immediately" -t 10 -n 1 -s
+
 ################################################################################
 ##### Generate the Doxygen code documentation and log the output.          #####
 echo 'Generating Doxygen code documentation...'
@@ -104,8 +108,12 @@ fi
 sed -i "s;^HTML_OUTPUT .*;HTML_OUTPUT = code_docs/${TRAVIS_REPO_NAME}/html;"  ${DOXYFILE}
 cd $TRAVIS_BUILD_DIR
 
+read -r -p "Wait 10 seconds or press any key to continue immediately" -t 10 -n 1 -s
+
 # Print out doxygen warnings in red
 ${TRAVIS_BUILD_DIR}/doxygen $DOXYFILE 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
+
+read -r -p "Wait 10 seconds or press any key to continue immediately" -t 10 -n 1 -s
 
 # if any warnings, bail!
 if [ -s foo.txt ]; then exit 1 ; fi
