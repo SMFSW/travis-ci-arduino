@@ -41,7 +41,7 @@ echo 'Setting up the script...'
 cd $TRAVIS_BUILD_DIR
 
 # Install doxygen from apt to get dependencies
-apt install doxygen
+sudo apt install doxygen
 # Getting latest doxygen binaries from doxygen website
 wget -q http://doxygen.nl/files/doxygen-1.8.14.linux.bin.tar.gz
 tar -xf doxygen-1.8.14.linux.bin.tar.gz
