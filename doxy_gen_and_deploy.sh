@@ -41,7 +41,7 @@ echo 'Setting up the script...'
 cd $TRAVIS_BUILD_DIR
 
 # Getting latest doxygen binaries from doxygen website
-wget -q ftp://ftp.stack.nl/pub/doxygen/doxygen-1.8.14.src.tar.gz
+wget -q https://ftp.osuosl.org/pub/blfs/conglomeration/doxygen/doxygen-1.8.14.src.tar.gz
 tar -xf doxygen-1.8.14.linux.bin.tar.gz
 mv doxygen-1.8.14/bin/doxygen .
 chmod +x doxygen
