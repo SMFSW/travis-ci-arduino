@@ -40,12 +40,10 @@ echo 'Setting up the script...'
 
 cd $TRAVIS_BUILD_DIR
 
-# Install doxygen from apt to get dependencies
-sudo apt install doxygen
-# Getting latest doxygen binaries from doxygen website
-wget -q http://doxygen.nl/files/doxygen-1.8.14.linux.bin.tar.gz
-tar -xf doxygen-1.8.14.linux.bin.tar.gz
-mv doxygen-1.8.14/bin/doxygen .
+# Getting doxygen binaries from doxygen website
+wget -q https://sourceforge.net/projects/doxygen/files/rel-1.8.13/doxygen-1.8.13.linux.bin.tar.gz
+tar -xf doxygen-1.8.13.linux.bin.tar.gz
+mv doxygen-1.8.13/bin/doxygen .
 chmod +x doxygen
 
 read -r -p "Wait 10 seconds or press any key to continue immediately" -t 10 -n 1 -s
