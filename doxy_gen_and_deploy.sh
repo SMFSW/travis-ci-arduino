@@ -41,9 +41,9 @@ echo 'Setting up the script...'
 cd $TRAVIS_BUILD_DIR
 
 # Getting doxygen binaries from doxygen website
-wget -q https://sourceforge.net/projects/doxygen/files/rel-1.8.13/doxygen-1.8.13.linux.bin.tar.gz
-tar -xf doxygen-1.8.13.linux.bin.tar.gz
-mv doxygen-1.8.13/bin/doxygen .
+wget -q https://sourceforge.net/projects/doxygen/files/rel-1.8.15/doxygen-1.8.15.linux.bin.tar.gz
+tar -xf doxygen-1.8.15.linux.bin.tar.gz
+mv doxygen-1.8.15/bin/doxygen .
 chmod +x doxygen
 
 # Create a clean working directory for this script.
