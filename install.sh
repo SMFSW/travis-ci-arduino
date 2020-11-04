@@ -39,7 +39,7 @@ echo "########################################################################";
 
 # if .travis.yml does not set version
 if [ -z $ARDUINO_IDE_VERSION ]; then
-export ARDUINO_IDE_VERSION="1.8.7"
+export ARDUINO_IDE_VERSION="1.8.13"
 echo "NOTE: YOUR .TRAVIS.YML DOES NOT SPECIFY ARDUINO IDE VERSION, USING $ARDUINO_IDE_VERSION"
 fi
 
