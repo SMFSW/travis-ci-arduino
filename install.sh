@@ -9,7 +9,7 @@ fi
 # associative array for the platforms that will be verified in build_main_platforms()
 # this will be eval'd in the functions below because arrays can't be exported
 # Uno is ATmega328, Zero is SAMD21G18, ESP8266, Leonardo is ATmega32u4, M4 is SAMD51, Mega is ATmega2560, ESP32
-export MAIN_PLATFORMS='declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:eesz=4M3M,xtal=80" [leonardo]="arduino:avr:leonardo" [m4]="adafruit:samd:adafruit_metro_m4" [mega2560]="arduino:avr:mega:cpu=atmega2560" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
+export MAIN_PLATFORMS='declare -A main_platforms=( [uno]="arduino:avr:uno" [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:eesz=4M3M,xtal=80" [leonardo]="arduino:avr:leonardo" [m4]="adafruit:samd:adafruit_metro_m4:speed=120" [mega2560]="arduino:avr:mega:cpu=atmega2560" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
 
 export AVR_PLATFORMS='declare -A avr_platforms=( [uno]="arduino:avr:uno" [leonardo]="arduino:avr:leonardo" )'
 
@@ -17,21 +17,27 @@ export AVR_PLATFORMS='declare -A avr_platforms=( [uno]="arduino:avr:uno" [leonar
 # this will be eval'd in the functions below because arrays can't be exported
 export AUX_PLATFORMS='declare -A aux_platforms=( [trinket]="adafruit:avr:trinket5" [gemma]="arduino:avr:gemma" )'
 
-export CPLAY_PLATFORMS='declare -A cplay_platforms=( [cplayClassic]="arduino:avr:circuitplay32u4cat" [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0" ) '
+export CPLAY_PLATFORMS='declare -A cplay_platforms=( [cplayClassic]="arduino:avr:circuitplay32u4cat" [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0" [cplayExpressAda]="adafruit:samd:adafruit_circuitplayground_m0" [cplayBluefruit]="adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0" )'
 
-export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_zero_native", [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0", [m4]="adafruit:samd:adafruit_metro_m4" )'
+export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_zero_native", [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0", [m4]="adafruit:samd:adafruit_metro_m4:speed=120" )'
 
-export M4_PLATFORMS='declare -A m4_platforms=( [m4]="adafruit:samd:adafruit_metro_m4", [trellis_m4]="adafruit:samd:adafruit_trellis_m4" )'
+export M4_PLATFORMS='declare -A m4_platforms=( [m4]="adafruit:samd:adafruit_metro_m4:speed=120", [trellis_m4]="adafruit:samd:adafruit_trellis_m4:speed=120", [grand_central_m4]="adafruit:samd:adafruit_grand_central_m4:speed=120" )'
 
-export IO_PLATFORMS='declare -A io_platforms=( [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:eesz=4M3M,xtal=80" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
+export ARCADA_PLATFORMS='declare -A arcada_platforms=( [pybadge]="adafruit:samd:adafruit_pybadge_m4:speed=120", [pygamer]="adafruit:samd:adafruit_pygamer_m4:speed=120", [hallowing_m4]="adafruit:samd:adafruit_hallowing_m4:speed=120", [cplayExpressAda]="adafruit:samd:adafruit_circuitplayground_m0" )'
+
+export IO_PLATFORMS='declare -A io_platforms=( [zero]="arduino:samd:arduino_zero_native", [m4wifi]="adafruit:samd:adafruit_metro_m4_airliftlite:speed=120", [esp8266]="esp8266:esp8266:huzzah:eesz=4M3M,xtal=80" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
+
+export NRF5X_PLATFORMS='declare -A nrf5x_platforms=( [nrf52840]="adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0")'
 
 # make display available for arduino CLI
 /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
 sleep 3
 export DISPLAY=:1.0
 
+#This condition is to avoid reruning install when build argument is passed
+if [[ $# -eq 0 ]] ; then
 # define colors
-GRAY='\033[1;30m'; RED='\033[0;31m'; LRED='\033[1;31m'; GREEN='\033[0;32m'; LGREEN='\033[1;32m'; ORANGE='\033[0;33m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; LBLUE='\033[1;34m'; PURPLE='\033[0;35m'; LPURPLE='\033[1;35m'; CYAN='\033[0;36m'; LCYAN='\033[1;36m'; LGRAY='\033[0;37m'; WHITE='\033[1;37m'; 
+GRAY='\033[1;30m'; RED='\033[0;31m'; LRED='\033[1;31m'; GREEN='\033[0;32m'; LGREEN='\033[1;32m'; ORANGE='\033[0;33m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; LBLUE='\033[1;34m'; PURPLE='\033[0;35m'; LPURPLE='\033[1;35m'; CYAN='\033[0;36m'; LCYAN='\033[1;36m'; LGRAY='\033[0;37m'; WHITE='\033[1;37m';
 
 echo -e "\n########################################################################";
 echo -e "${YELLOW}INSTALLING ARDUINO IDE"
@@ -69,6 +75,9 @@ echo -n "CACHED: "
 echo -e """$GREEN""\xe2\x9c\x93"
 fi
 
+# define output directory for .hex files
+export ARDUINO_HEX_DIR=arduino_build_$TRAVIS_BUILD_NUMBER
+
 # link test library folder to the arduino libraries folder
 ln -s $TRAVIS_BUILD_DIR $HOME/arduino_ide/libraries/Adafruit_Test_Library
 
@@ -79,35 +88,68 @@ echo -e "\n#####################################################################
 echo -e "${YELLOW}INSTALLING DEPENDENCIES"
 echo "########################################################################";
 
+# install dependancy libraries in library.properties
+grep "depends=" $HOME/arduino_ide/libraries/Adafruit_Test_Library/library.properties | sed 's/depends=//' | sed -n 1'p' |  tr ',' '\n' | while read word; do arduino --install-library "$word"; done
 
-# install the due, esp8266, and adafruit board packages
+# install the zero, esp8266, and adafruit board packages
 echo -n "ADD PACKAGE INDEX: "
 DEPENDENCY_OUTPUT=$(arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json" --save-prefs 2>&1)
 if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
-echo -n "ESP32: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards esp32:esp32 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+# This is a hack, we have to install by hand so lets delete it
+echo "Removing ESP32 cache"
+rm -rf ~/.arduino15/packages/esp32
+echo -n "Current packages list:"
+[ -d ~/.arduino15/packages/ ] && ls ~/.arduino15/packages/
 
-echo -n "DUE: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+INSTALL_ESP32=$([[ $INSTALL_PLATFORMS == *"esp32"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_ZERO=$([[ $INSTALL_PLATFORMS == *"zero"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_ESP8266=$([[ $INSTALL_PLATFORMS == *"esp8266"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_AVR=$([[ $INSTALL_PLATFORMS == *"avr"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_SAMD=$([[ $INSTALL_PLATFORMS == *"samd"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_NRF52=$([[ $INSTALL_PLATFORMS == *"nrf52"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
 
-echo -n "ZERO: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:samd 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+if [[ $INSTALL_ESP32 == 1 ]]; then
+  echo -n "ESP32: "
+  DEPENDENCY_OUTPUT=$(arduino --install-boards esp32:esp32 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
 
-echo -n "ESP8266: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards esp8266:esp8266 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+if [[ $INSTALL_ZERO == 1 ]]; then
+  echo -n "ZERO: "
+  DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:samd 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
 
-echo -n "ADAFRUIT AVR: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:avr 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+if [[ $INSTALL_ESP8266 == 1 ]]; then
+  echo -n "ESP8266: "
+  DEPENDENCY_OUTPUT=$(arduino --install-boards esp8266:esp8266 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
 
-echo -n "ADAFRUIT SAMD: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:samd 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+if [[ $INSTALL_AVR == 1 ]]; then
+  echo -n "ADAFRUIT AVR: "
+  DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:avr 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
+
+if [[ $INSTALL_SAMD == 1 ]]; then
+  echo -n "ADAFRUIT SAMD: "
+  DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:samd 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
+
+if [[ $INSTALL_NRF52 == 1 ]]; then
+  echo -n "ADAFRUIT NRF5X: "
+  pip3 install --user setuptools
+  pip3 install --user adafruit-nrfutil
+  pip3 install --user pyserial
+  sudo pip3 install setuptools
+  sudo pip3 install adafruit-nrfutil
+  sudo pip3 install pyserial
+  DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:nrf52 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
 
 # install random lib so the arduino IDE grabs a new library index
 # see: https://github.com/arduino/Arduino/issues/3535
@@ -128,8 +170,10 @@ export PASS_COUNT=0
 export SKIP_COUNT=0
 export FAIL_COUNT=0
 export PDE_COUNT=0
-
+# close if [[ $# -eq 0 ]] ; then
+fi 
 # build all of the examples for the passed platform
+#Sourcing and defining functions
 function build_platform()
 {
 
@@ -138,9 +182,10 @@ function build_platform()
   eval $AVR_PLATFORMS
   eval $AUX_PLATFORMS
   eval $CPLAY_PLATFORMS
-  eval $SAMD_PLATFORMS
   eval $M4_PLATFORMS
+  eval $ARCADA_PLATFORMS
   eval $IO_PLATFORMS
+  eval $NRF5X_PLATFORMS
 
   # reset platform json var
   PLATFORM_JSON=""
@@ -157,8 +202,20 @@ function build_platform()
   # grab all pde and ino example sketches
   declare -a examples
 
-  # loop through results and add them to the array
-  examples=($(find $PWD -name "*.pde" -o -name "*.ino"))
+  if [ "$PLATFORM_CHECK_ONLY_ON_FILE" = true ]; then
+    # loop through results and add them to the array
+    examples=($(
+      for f in $(find . -type f -iname '*.ino' -o -iname '*.pde'); do
+        # TODO: distinguish platforms
+        if [ -e "$(dirname $f)/.$platform_key.test" ]; then
+            echo "$f"
+        fi
+      done
+    ))
+  else
+    # loop through results and add them to the array
+    examples=($(find $PWD -name "*.pde" -o -name "*.ino"))
+  fi
 
   # get the last example in the array
   local last="${examples[@]:(-1)}"
@@ -172,12 +229,14 @@ function build_platform()
     platform=${aux_platforms[$platform_key]}
   elif [[ ${cplay_platforms[$platform_key]} ]]; then
     platform=${cplay_platforms[$platform_key]}
-  elif [[ ${samd_platforms[$platform_key]} ]]; then
-    platform=${samd_platforms[$platform_key]}
   elif [[ ${m4_platforms[$platform_key]} ]]; then
     platform=${m4_platforms[$platform_key]}
+  elif [[ ${arcada_platforms[$platform_key]} ]]; then
+    platform=${arcada_platforms[$platform_key]}
   elif [[ ${io_platforms[$platform_key]} ]]; then
     platform=${io_platforms[$platform_key]}
+  elif [[ ${nrf5x_platforms[$platform_key]} ]]; then
+    platform=${nrf5x_platforms[$platform_key]}
   else
     echo "NON-STANDARD PLATFORM KEY: $platform_key"
     platform=$platform_key
@@ -200,6 +259,7 @@ function build_platform()
   if [ $platform_switch -ne 0 ]; then
     # heavy X
     echo -e """$RED""\xe2\x9c\x96"
+    echo -e "arduino --board ${platform} --save-prefs 2>&1"
     echo $platform_stdout
     exit_code=1
   else
@@ -298,11 +358,15 @@ function build_platform()
 
     fi
 
+    # get the sketch name so we can place the generated files in the respective folder
+    local sketch_filename_with_ending=$(basename -- "$example")
+    local sketch_filename="${sketch_filename_with_ending%.*}"
+    local build_path=$ARDUINO_HEX_DIR/$platform_key/$sketch_filename
     # verify the example, and save stdout & stderr to a variable
     # we have to avoid reading the exit code of local:
     # "when declaring a local variable in a function, the local acts as a command in its own right"
     local build_stdout
-    build_stdout=$(arduino --verify $example 2>&1)
+    build_stdout=$(arduino --verify --pref build.path=$build_path --preserve-temp-files $example 2>&1)
 
     # echo output if the build failed
     if [ $? -ne 0 ]; then
@@ -342,7 +406,7 @@ function build_platform()
 
 }
 
-# build all examples for every platform in $main_platforms
+# build all examples for every platform in $MAIN_PLATFORMS
 function build_main_platforms()
 {
 
@@ -412,6 +476,55 @@ function build_avr_platforms()
     # is this the last platform in the loop
     local last_platform=0
     if [ "$last" == "${avr_platforms[$p_key]}" ]; then
+      last_platform=1
+    fi
+
+    # build all examples for this platform
+    build_platform $p_key
+
+    # check if build failed
+    if [ $? -ne 0 ]; then
+      platforms_json="${platforms_json}$(json_platform $p_key 0 "$PLATFORM_JSON" $last_platform)"
+      exit_code=1
+    else
+      platforms_json="${platforms_json}$(json_platform $p_key 1 "$PLATFORM_JSON" $last_platform)"
+    fi
+
+  done
+
+  # exit code is opposite of json build status
+  if [ $exit_code -eq 0 ]; then
+    json_main_platforms 1 "$platforms_json"
+  else
+    json_main_platforms 0 "$platforms_json"
+  fi
+
+  return $exit_code
+
+}
+
+# build all examples for every platform in $AUX_PLATFORMS
+function build_aux_platforms()
+{
+
+  # arrays can't be exported, so we have to eval
+  eval $AUX_PLATFORMS
+
+  # track the build status all platforms
+  local exit_code=0
+
+  # var to hold platforms
+  local platforms_json=""
+
+  # get the last element in the array
+  local last="${aux_platforms[@]:(-1)}"
+
+  # loop through platforms in main platforms assoc array
+  for p_key in "${!aux_platforms[@]}"; do
+
+    # is this the last platform in the loop
+    local last_platform=0
+    if [ "$last" == "${aux_platforms[$p_key]}" ]; then
       last_platform=1
     fi
 
@@ -631,6 +744,104 @@ function build_io_platforms()
 
 }
 
+function build_arcada_platforms()
+{
+
+  # arrays can't be exported, so we have to eval
+  eval $ARCADA_PLATFORMS
+
+  # track the build status all platforms
+  local exit_code=0
+
+  # var to hold platforms
+  local platforms_json=""
+
+  # get the last element in the array
+  local last="${arcada_platforms[@]:(-1)}"
+
+  # loop through platforms in main platforms assoc array
+  for p_key in "${!arcada_platforms[@]}"; do
+
+    # is this the last platform in the loop
+    local last_platform=0
+    if [ "$last" == "${arcada_platforms[$p_key]}" ]; then
+      last_platform=1
+    fi
+
+    # build all examples for this platform
+    build_platform $p_key
+
+    # check if build failed
+    if [ $? -ne 0 ]; then
+      platforms_json="${platforms_json}$(json_platform $p_key 0 "$PLATFORM_JSON" $last_platform)"
+      exit_code=1
+    else
+      platforms_json="${platforms_json}$(json_platform $p_key 1 "$PLATFORM_JSON" $last_platform)"
+    fi
+
+  done
+
+  # exit code is opposite of json build status
+  if [ $exit_code -eq 0 ]; then
+    json_main_platforms 1 "$platforms_json"
+  else
+    json_main_platforms 0 "$platforms_json"
+  fi
+
+  return $exit_code
+
+}
+
+
+function build_nrf5x_platforms()
+{
+
+  # arrays can't be exported, so we have to eval
+  eval $NRF5X_PLATFORMS
+
+  # track the build status all platforms
+  local exit_code=0
+
+  # var to hold platforms
+  local platforms_json=""
+
+  # get the last element in the array
+  local last="${nrf5x_platforms[@]:(-1)}"
+
+  # loop through platforms in main platforms assoc array
+  for p_key in "${!nrf5x_platforms[@]}"; do
+
+    # is this the last platform in the loop
+    local last_platform=0
+    if [ "$last" == "${nrf5x_platforms[$p_key]}" ]; then
+      last_platform=1
+    fi
+
+    # build all examples for this platform
+    build_platform $p_key
+
+    # check if build failed
+    if [ $? -ne 0 ]; then
+      platforms_json="${platforms_json}$(json_platform $p_key 0 "$PLATFORM_JSON" $last_platform)"
+      exit_code=1
+    else
+      platforms_json="${platforms_json}$(json_platform $p_key 1 "$PLATFORM_JSON" $last_platform)"
+    fi
+
+  done
+
+  # exit code is opposite of json build status
+  if [ $exit_code -eq 0 ]; then
+    json_main_platforms 1 "$platforms_json"
+  else
+    json_main_platforms 0 "$platforms_json"
+  fi
+
+  return $exit_code
+
+}
+
+
 # generate json string for a sketch
 function json_sketch()
 {
@@ -703,3 +914,17 @@ function json_main_platforms()
   echo -e "||||||||||||||||||||||||||||| JSON STATUS ||||||||||||||||||||||||||||||\n"
 
 }
+
+#If there is an argument
+if [[ ! $# -eq 0 ]] ; then
+# define output directory for .hex files
+export ARDUINO_HEX_DIR=arduino_build_$TRAVIS_BUILD_NUMBER
+
+# link test library folder to the arduino libraries folder
+ln -s $TRAVIS_BUILD_DIR $HOME/arduino_ide/libraries/Adafruit_Test_Library
+
+# add the arduino CLI to our PATH
+export PATH="$HOME/arduino_ide:$PATH"
+
+"$@"
+fi
